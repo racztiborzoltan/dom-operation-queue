@@ -14,5 +14,16 @@
     		"DomOperationQueue\\": "src/"
     	}
     },
-    "require": {}
+    "autoload-dev": {
+    	"psr-4": {
+    		"DomOperationQueue\\Tests\\": "tests/src/"
+    	}
+    },
+    "require": {
+    	"php": "^7.1"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^7.0",
+        "friendsofphp/php-cs-fixer": "^2.0"
+    }
 }
