@@ -1,0 +1,18 @@
+{
+    "name": "racztiborzoltan/dom-operation-queue",
+    "description": "DOM Operation Queue",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Rácz Tibor Zoltán",
+            "email": "racztiborzoltan@gmail.com"
+        }
+    ],
+    "autoload": {
+    	"psr-4": {
+    		"DomOperationQueue\\": "src/"
+    	}
+    },
+    "require": {}
+}
