@@ -90,8 +90,8 @@ class DomOperationQueue implements DomOperationInterface
         $this->_getOperationList()->setExtractFlags(\SplPriorityQueue::EXTR_BOTH);
 
         $new_list = [];
-        foreach($operation_list as $item){
-            if($item['data'] !== $operation){
+        foreach ($operation_list as $item) {
+            if ($item['data'] !== $operation) {
                 $new_list[] = $item;
             }
         }
@@ -99,7 +99,7 @@ class DomOperationQueue implements DomOperationInterface
 
         $this->_getOperationList()->setExtractFlags($original_extract_flag);
 
-        foreach($new_list as $item){
+        foreach ($new_list as $item) {
             $operation_list->insert($item['data'], $item['priority']);
         }
         unset($item);
@@ -122,8 +122,8 @@ class DomOperationQueue implements DomOperationInterface
         $this->_getOperationList()->setExtractFlags(\SplPriorityQueue::EXTR_BOTH);
 
         $new_list = [];
-        foreach($operation_list as $item){
-            if($item['priority'] !== $priority){
+        foreach ($operation_list as $item) {
+            if ($item['priority'] !== $priority) {
                 $new_list[] = $item;
             }
         }
@@ -131,7 +131,7 @@ class DomOperationQueue implements DomOperationInterface
 
         $this->_getOperationList()->setExtractFlags($original_extract_flag);
 
-        foreach($new_list as $item){
+        foreach ($new_list as $item) {
             $operation_list->insert($item['data'], $item['priority']);
         }
         unset($item);
