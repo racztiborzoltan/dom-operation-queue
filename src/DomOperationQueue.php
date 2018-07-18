@@ -57,19 +57,12 @@ class DomOperationQueue implements DomOperationInterface
      * @throws \LogicException
      * @return \DomOperationQueue\DomOperationQueue
      */
-    public function addDomOperation(DomOperationInterface $operation)
+    public function addDomOperation(DomOperationInterface $operation, int $priority = null)
     {
-        if ($operation instanceof DomOperationPriorityAwareInterface) {
-            /**
-             * @var DomOperationPriorityAwareInterface $operation
-             */
-            $priority = $operation->getDomOperationPriority();
-        } else {
+        if (is_null($priority)) {
             $priority = $this->_getNextAutoPriority();
         }
-        if ($priority > PHP_INT_MAX || $priority < 1) {
-            throw new \LogicException('Invalid priority. Valid range: 1 - '.PHP_INT_MAX);
-        }
+
         /**
          * @var DomOperationInterface $operation
          */

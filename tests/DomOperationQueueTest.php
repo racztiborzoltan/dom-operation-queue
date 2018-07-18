@@ -17,6 +17,11 @@ final class DomOperationQueueTest extends TestCase
      */
     private $_test_operations = [];
 
+    /**
+     * @var integer[]
+     */
+    private $_test_operations_priority = [];
+
     private $_expected_tag_name_order = [];
 
     /**
@@ -39,11 +44,19 @@ final class DomOperationQueueTest extends TestCase
     {
         $list = new DomOperationQueue();
 
-        $this->_test_operations['test_a'] = new TestDomOperationWithPriority('test_a', 'test A', 10);
-        $this->_test_operations['test_b'] = new TestDomOperationWithPriority('test_b', 'test B', 5);
+        $this->_test_operations['test_a'] = new TestDomOperation('test_a', 'test A');
+        $this->_test_operations_priority['test_a'] = 10;
+
+        $this->_test_operations['test_b'] = new TestDomOperation('test_b', 'test B');
+        $this->_test_operations_priority['test_b'] = 5;
+
         $this->_test_operations['test'] = new TestDomOperation('test', 'test content');
-        $this->_test_operations['test_c'] = new TestDomOperationWithPriority('test_c', 'test C', 15);
-        $this->_test_operations['test_d'] = new TestDomOperationWithPriority('test_d', 'test D', 20);
+
+        $this->_test_operations['test_c'] = new TestDomOperation('test_c', 'test C');
+        $this->_test_operations_priority['test_c'] = 15;
+
+        $this->_test_operations['test_d'] = new TestDomOperation('test_d', 'test D');
+        $this->_test_operations_priority['test_d'] = 20;
 
         $this->_expected_tag_name_order = [
             $this->_test_operations['test']->getTagName(),
@@ -53,8 +66,9 @@ final class DomOperationQueueTest extends TestCase
             $this->_test_operations['test_b']->getTagName(),
         ];
 
-        foreach ($this->_test_operations as $operation) {
-            $list->addDomOperation($operation);
+        foreach ($this->_test_operations as $index => $operation) {
+            $priority = isset($this->_test_operations_priority[$index]) ? $this->_test_operations_priority[$index] : null;
+            $list->addDomOperation($operation, $priority);
         }
 
         return $list;
@@ -114,15 +128,14 @@ final class DomOperationQueueTest extends TestCase
 
         // add new operation:
         /**
-         * @var \DomOperationQueue\Tests\TestDomOperationWithPriority $test_operation_c2
+         * @var \DomOperationQueue\Tests\TestDomOperation $test_operation_c2
          */
         $test_operation_c2 = clone $this->_test_operations['test_c'];
         $test_operation_c2->setTagName('test_c2');
         $test_operation_c2->setContent('test C2');
-        $test_operation_c2->setPriority($this->_test_operations['test_c']->getPriority());
-        $list->addDomOperation($test_operation_c2);
+        $list->addDomOperation($test_operation_c2, $this->_test_operations_priority['test_c']);
         // add removed operation:
-        $list->addDomOperation($this->_test_operations['test_c']);
+        $list->addDomOperation($this->_test_operations['test_c'], $this->_test_operations_priority['test_c']);
 
         array_splice($this->_expected_tag_name_order, array_search($this->_test_operations['test_c']->getTagName(), $this->_expected_tag_name_order), 0, [
             $test_operation_c2->getTagName()
