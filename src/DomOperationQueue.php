@@ -57,7 +57,7 @@ class DomOperationQueue implements DomOperationInterface
      * @throws \LogicException
      * @return \DomOperationQueue\DomOperationQueue
      */
-    public function addDomOperation(DomOperationInterface $operation, int $priority = null)
+    public function add(DomOperationInterface $operation, int $priority = null)
     {
         if (is_null($priority)) {
             $priority = $this->_getNextAutoPriority();
@@ -77,7 +77,7 @@ class DomOperationQueue implements DomOperationInterface
      * @throws \LogicException
      * @return \DomOperationQueue\DomOperationQueue
      */
-    public function removeDomOperation(DomOperationInterface $operation)
+    public function remove(DomOperationInterface $operation)
     {
         //
         // thanks for original source code: https://gist.github.com/denisdeejay/1ee0ce70b3afe76cf31e

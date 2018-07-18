@@ -68,7 +68,7 @@ final class DomOperationQueueTest extends TestCase
 
         foreach ($this->_test_operations as $index => $operation) {
             $priority = isset($this->_test_operations_priority[$index]) ? $this->_test_operations_priority[$index] : null;
-            $list->addDomOperation($operation, $priority);
+            $list->add($operation, $priority);
         }
 
         return $list;
@@ -107,7 +107,7 @@ final class DomOperationQueueTest extends TestCase
     {
         $list = $this->_factoryDomOperationList();
 
-        $list->removeDomOperation($this->_test_operations['test_c']);
+        $list->remove($this->_test_operations['test_c']);
         unset($this->_expected_tag_name_order[array_search($this->_test_operations['test_c']->getTagName(), $this->_expected_tag_name_order)]);
 
         /**
@@ -124,7 +124,7 @@ final class DomOperationQueueTest extends TestCase
         $list = $this->_factoryDomOperationList();
 
         // remove operation:
-        $list->removeDomOperation($this->_test_operations['test_c']);
+        $list->remove($this->_test_operations['test_c']);
 
         // add new operation:
         /**
@@ -133,9 +133,9 @@ final class DomOperationQueueTest extends TestCase
         $test_operation_c2 = clone $this->_test_operations['test_c'];
         $test_operation_c2->setTagName('test_c2');
         $test_operation_c2->setContent('test C2');
-        $list->addDomOperation($test_operation_c2, $this->_test_operations_priority['test_c']);
+        $list->add($test_operation_c2, $this->_test_operations_priority['test_c']);
         // add removed operation:
-        $list->addDomOperation($this->_test_operations['test_c'], $this->_test_operations_priority['test_c']);
+        $list->add($this->_test_operations['test_c'], $this->_test_operations_priority['test_c']);
 
         array_splice($this->_expected_tag_name_order, array_search($this->_test_operations['test_c']->getTagName(), $this->_expected_tag_name_order), 0, [
             $test_operation_c2->getTagName()

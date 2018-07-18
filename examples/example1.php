@@ -23,11 +23,11 @@ $removable_operation = new TestDomOperation('test_c', 'test C');
 // - operation with highest priority will be executed earlier
 // - operation without priority will be added with automatic priority
 //
-$list->addDomOperation(new TestDomOperation('test_a', 'test A'), 10);
-$list->addDomOperation(new TestDomOperation('test_b', 'test B'), 5);
-$list->addDomOperation(new TestDomOperation('test', 'test content'));
-$list->addDomOperation($removable_operation, 15);
-$list->addDomOperation(new TestDomOperation('test_d', 'test D'), 20);
+$list->add(new TestDomOperation('test_a', 'test A'), 10);
+$list->add(new TestDomOperation('test_b', 'test B'), 5);
+$list->add(new TestDomOperation('test', 'test content'));
+$list->add($removable_operation, 15);
+$list->add(new TestDomOperation('test_d', 'test D'), 20);
 
 
 
@@ -57,7 +57,7 @@ echo str_repeat(PHP_EOL, 3) . str_repeat('=', 80) . str_repeat(PHP_EOL, 3);
 
 
 
-$list->removeDomOperation($removable_operation);
+$list->remove($removable_operation);
 
 
 $dom_document = new DOMDocument();
@@ -76,8 +76,8 @@ echo str_repeat(PHP_EOL, 3) . str_repeat('=', 80) . str_repeat(PHP_EOL, 3);
 
 
 
-$list->addDomOperation(new TestDomOperation('test_c2', 'test C2'), 15);
-$list->addDomOperation($removable_operation, 15);
+$list->add(new TestDomOperation('test_c2', 'test C2'), 15);
+$list->add($removable_operation, 15);
 
 $dom_document = new DOMDocument();
 $dom_document->loadXML('<root example="3"></root>');
