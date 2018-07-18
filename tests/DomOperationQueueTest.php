@@ -149,4 +149,24 @@ final class DomOperationQueueTest extends TestCase
 
         $this->assertTrue($this->_tagNameOrderIsCorrect($dom_document->firstChild->childNodes, $this->_expected_tag_name_order));
     }
+
+
+    public function testRemoveByPriority()
+    {
+        $list = $this->_factoryDomOperationList();
+
+        $operation_name = 'test_a';
+
+        $list->removeByPriority($this->_test_operations_priority[$operation_name]);
+
+        /**
+         * @var \DOMDocument $dom_document
+         */
+        $dom_document = $this->_factoryDomDocument();
+        $list->execute($dom_document);
+
+        $expected_tag_name_order = array_values(array_diff($this->_expected_tag_name_order, [$operation_name]));
+
+        $this->assertTrue($this->_tagNameOrderIsCorrect($dom_document->firstChild->childNodes, $expected_tag_name_order));
+    }
 }

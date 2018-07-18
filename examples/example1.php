@@ -11,24 +11,38 @@ if (!class_exists(TestDomOperation::class)) {
 }
 
 
+
+// =============================================================================
+echo str_repeat(PHP_EOL, 3) . str_repeat('=', 80) . str_repeat(PHP_EOL, 3);
 // =============================================================================
 
 
 
-$list = new DomOperationQueue();
+call_user_func(function(){
 
-$removable_operation = new TestDomOperation('test_c', 'test C');
+    echo '# add items to list with priority or without priority:' . PHP_EOL . PHP_EOL;
 
-//
-// - operation with highest priority will be executed earlier
-// - operation without priority will be added with automatic priority
-//
-$list->add(new TestDomOperation('test_a', 'test A'), 10);
-$list->add(new TestDomOperation('test_b', 'test B'), 5);
-$list->add(new TestDomOperation('test', 'test content'));
-$list->add($removable_operation, 15);
-$list->add(new TestDomOperation('test_d', 'test D'), 20);
+    $list = new DomOperationQueue();
 
+    //
+    // - operation with highest priority will be executed earlier
+    // - operation without priority will be added with automatic priority
+    //
+    $list->add(new TestDomOperation('test_a', 'test A'), 10);
+    $list->add(new TestDomOperation('test_b', 'test B'), 5);
+    $list->add(new TestDomOperation('test', 'test content'));
+    $list->add(new TestDomOperation('test_c', 'test C'), 15);
+    $list->add(new TestDomOperation('test_d', 'test D'), 20);
+
+    $dom_document = new DOMDocument();
+    $dom_document->loadXML('<root></root>');
+
+    $list->execute($dom_document);
+
+    $dom_document->formatOutput = true;
+    echo $dom_document->saveXML($dom_document->documentElement);
+
+});
 
 
 
@@ -38,15 +52,35 @@ echo str_repeat(PHP_EOL, 3) . str_repeat('=', 80) . str_repeat(PHP_EOL, 3);
 
 
 
+call_user_func(function(){
 
-$dom_document = new DOMDocument();
-$dom_document->loadXML('<root example="1"></root>');
+    echo '# remove item from the list:' . PHP_EOL . PHP_EOL;
 
-$list->execute($dom_document);
+    $list = new DomOperationQueue();
 
-$dom_document->formatOutput = true;
-echo $dom_document->saveXML($dom_document->documentElement);
+    $removable_operation = new TestDomOperation('test_c', 'test C');
 
+    //
+    // - operation with highest priority will be executed earlier
+    // - operation without priority will be added with automatic priority
+    //
+    $list->add(new TestDomOperation('test_a', 'test A'), 10);
+    $list->add(new TestDomOperation('test_b', 'test B'), 5);
+    $list->add(new TestDomOperation('test', 'test content'));
+    $list->add($removable_operation, 15);
+    $list->add(new TestDomOperation('test_d', 'test D'), 20);
+
+    $list->remove($removable_operation);
+
+    $dom_document = new DOMDocument();
+    $dom_document->loadXML('<root></root>');
+
+    $list->execute($dom_document);
+
+    $dom_document->formatOutput = true;
+    echo $dom_document->saveXML($dom_document->documentElement);
+
+});
 
 
 
@@ -56,17 +90,34 @@ echo str_repeat(PHP_EOL, 3) . str_repeat('=', 80) . str_repeat(PHP_EOL, 3);
 
 
 
+call_user_func(function(){
 
-$list->remove($removable_operation);
+    echo '# remove item from the list by priority:' . PHP_EOL . PHP_EOL;
 
+    $list = new DomOperationQueue();
 
-$dom_document = new DOMDocument();
-$dom_document->loadXML('<root example="2"></root>');
+    //
+    // - operation with highest priority will be executed earlier
+    // - operation without priority will be added with automatic priority
+    //
+    $list->add(new TestDomOperation('test_a', 'test A'), 10);
+    $list->add(new TestDomOperation('test_b', 'test B'), 5);
+    $list->add(new TestDomOperation('test_c2', 'test C2'), 15);
+    $list->add(new TestDomOperation('test', 'test content'));
+    $list->add(new TestDomOperation('test_c', 'test C'), 15);
+    $list->add(new TestDomOperation('test_d', 'test D'), 20);
 
-$list->execute($dom_document);
+    $list->removeByPriority(15);
 
-$dom_document->formatOutput = true;
-echo $dom_document->saveXML($dom_document->documentElement);
+    $dom_document = new DOMDocument();
+    $dom_document->loadXML('<root></root>');
+
+    $list->execute($dom_document);
+
+    $dom_document->formatOutput = true;
+    echo $dom_document->saveXML($dom_document->documentElement);
+
+});
 
 
 
@@ -76,16 +127,37 @@ echo str_repeat(PHP_EOL, 3) . str_repeat('=', 80) . str_repeat(PHP_EOL, 3);
 
 
 
-$list->add(new TestDomOperation('test_c2', 'test C2'), 15);
-$list->add($removable_operation, 15);
+call_user_func(function(){
 
-$dom_document = new DOMDocument();
-$dom_document->loadXML('<root example="3"></root>');
+    echo '# remove item, and add item and removed item with same priority:' . PHP_EOL . PHP_EOL;
 
-$list->execute($dom_document);
+    $list = new DomOperationQueue();
 
-$dom_document->formatOutput = true;
-echo $dom_document->saveXML($dom_document->documentElement);
+    $removable_operation = new TestDomOperation('test_c', 'test C');
+
+    //
+    // - operation with highest priority will be executed earlier
+    // - operation without priority will be added with automatic priority
+    //
+    $list->add(new TestDomOperation('test_a', 'test A'), 10);
+    $list->add(new TestDomOperation('test_b', 'test B'), 5);
+    $list->add(new TestDomOperation('test', 'test content'));
+    $list->add($removable_operation, 15);
+    $list->add(new TestDomOperation('test_d', 'test D'), 20);
+
+    $list->remove($removable_operation);
+    $list->add(new TestDomOperation('test_c2', 'test C2'), 15);
+    $list->add($removable_operation, 15);
+
+    $dom_document = new DOMDocument();
+    $dom_document->loadXML('<root></root>');
+
+    $list->execute($dom_document);
+
+    $dom_document->formatOutput = true;
+    echo $dom_document->saveXML($dom_document->documentElement);
+
+});
 
 
 

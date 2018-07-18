@@ -55,9 +55,9 @@ class DomOperationQueue implements DomOperationInterface
      *
      * @param DomOperationInterface $operation
      * @throws \LogicException
-     * @return \DomOperationQueue\DomOperationQueue
+     * @return self
      */
-    public function add(DomOperationInterface $operation, int $priority = null)
+    public function add(DomOperationInterface $operation, int $priority = null): self
     {
         if (is_null($priority)) {
             $priority = $this->_getNextAutoPriority();
@@ -75,9 +75,9 @@ class DomOperationQueue implements DomOperationInterface
      *
      * @param DomOperationInterface $operation
      * @throws \LogicException
-     * @return \DomOperationQueue\DomOperationQueue
+     * @return self
      */
-    public function remove(DomOperationInterface $operation)
+    public function remove(DomOperationInterface $operation): self
     {
         //
         // thanks for original source code: https://gist.github.com/denisdeejay/1ee0ce70b3afe76cf31e
@@ -103,7 +103,38 @@ class DomOperationQueue implements DomOperationInterface
             $operation_list->insert($item['data'], $item['priority']);
         }
         unset($item);
+        return $this;
+    }
 
+    /**
+     * Remove DOM Operation objects by priority
+     *
+     * @param DomOperationInterface $operation
+     * @return self
+     */
+    public function removeByPriority(int $priority): self
+    {
+        /**
+         * @var \SplPriorityQueue $operation_list
+         */
+        $operation_list = $this->_getOperationList();
+        $original_extract_flag = $operation_list->getExtractFlags();
+        $this->_getOperationList()->setExtractFlags(\SplPriorityQueue::EXTR_BOTH);
+
+        $new_list = [];
+        foreach($operation_list as $item){
+            if($item['priority'] !== $priority){
+                $new_list[] = $item;
+            }
+        }
+        unset($item);
+
+        $this->_getOperationList()->setExtractFlags($original_extract_flag);
+
+        foreach($new_list as $item){
+            $operation_list->insert($item['data'], $item['priority']);
+        }
+        unset($item);
         return $this;
     }
 
